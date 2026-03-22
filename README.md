@@ -98,7 +98,7 @@ source ~/.bashrc
 
 ```bash
 # 下载 agency-agents 项目
-git clone https://github.com/anomalyco/agency-agents-zh.git
+git clone https://github.com/jnMetaCode/agency-agents-zh.git
 
 # 转换数字员工格式为 OpenCode
 cd agency-agents-zh
