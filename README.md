@@ -77,7 +77,7 @@ AgentHub 是一个基于 OpenCode 的 AI 数字员工（智能体）管理系统
 #### 1. 克隆项目
 
 ```bash
-git clone https://github.com/your-repo/agent-hub.git
+git clone https://github.com/Shybert-AI/agent-hub.git
 cd agent-hub
 ```
 
