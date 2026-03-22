@@ -1,0 +1,539 @@
+{% extends "layout.html" %}
+
+{% block title %}AgentHub - 设置{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <header class="page-header">
+        <h1>设置</h1>
+        <p>配置您的 AgentHub 系统</p>
+    </header>
+    
+    <div class="settings-layout">
+        <!-- 设置导航 -->
+        <nav class="settings-nav">
+            <a href="#general" class="settings-nav-item active" data-section="general">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                通用设置
+            </a>
+            <a href="#api" class="settings-nav-item" data-section="api">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                </svg>
+                API 配置
+            </a>
+            <a href="#appearance" class="settings-nav-item" data-section="appearance">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                外观
+            </a>
+            <a href="#about" class="settings-nav-item" data-section="about">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                关于
+            </a>
+        </nav>
+        
+        <!-- 设置内容 -->
+        <div class="settings-content">
+            <!-- 通用设置 -->
+            <section class="settings-section active" id="general">
+                <h2>通用设置</h2>
+                <div class="settings-card">
+                    <div class="form-group">
+                        <label class="form-label">系统名称</label>
+                        <input type="text" class="input" id="systemName" value="AgentHub" placeholder="输入系统名称">
+                        <p class="form-help">显示在页面标题和侧边栏的系统名称</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">默认智能体</label>
+                        <select class="input" id="defaultAgent">
+                            <option value="">无</option>
+                        </select>
+                        <p class="form-help">新对话默认使用的智能体</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="enableHistory" checked>
+                            启用对话历史
+                        </label>
+                        <p class="form-help">保存对话历史记录到本地存储</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- API 配置 -->
+            <section class="settings-section" id="api">
+                <h2>API 配置</h2>
+                <div class="settings-card">
+                    <div class="form-group">
+                        <label class="form-label">DeepSeek API Key</label>
+                        <input type="password" class="input" id="deepseekApiKey" placeholder="sk-xxxxxxxx">
+                        <p class="form-help">从 DeepSeek 平台获取的 API Key</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">OpenCode API URL</label>
+                        <input type="text" class="input" id="opencodeUrl" value="http://localhost:8080" placeholder="http://localhost:8080">
+                        <p class="form-help">OpenCode 服务的地址</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">默认模型</label>
+                        <select class="input" id="defaultModel">
+                            <option value="deepseek-chat">DeepSeek Chat</option>
+                            <option value="deepseek-coder">DeepSeek Coder</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>连接测试</h3>
+                    <div class="test-buttons">
+                        <button class="btn btn-secondary" onclick="testConnection('deepseek')">
+                            测试 DeepSeek 连接
+                        </button>
+                        <button class="btn btn-secondary" onclick="testConnection('opencode')">
+                            测试 OpenCode 连接
+                        </button>
+                    </div>
+                    <div class="test-result" id="testResult"></div>
+                </div>
+            </section>
+            
+            <!-- 外观设置 -->
+            <section class="settings-section" id="appearance">
+                <h2>外观设置</h2>
+                <div class="settings-card">
+                    <div class="form-group">
+                        <label class="form-label">主题</label>
+                        <div class="theme-options">
+                            <label class="theme-option">
+                                <input type="radio" name="theme" value="dark" checked>
+                                <div class="theme-preview dark">
+                                    <span>深色</span>
+                                </div>
+                            </label>
+                            <label class="theme-option">
+                                <input type="radio" name="theme" value="light">
+                                <div class="theme-preview light">
+                                    <span>浅色</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">侧边栏默认状态</label>
+                        <select class="input" id="sidebarDefault">
+                            <option value="expanded">展开</option>
+                            <option value="collapsed">收起</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 关于 -->
+            <section class="settings-section" id="about">
+                <h2>关于 AgentHub</h2>
+                <div class="settings-card">
+                    <div class="about-info">
+                        <div class="about-logo"><i class="fa-solid fa-robot"></i></div>
+                        <h3>AgentHub</h3>
+                        <p class="version">版本 1.0.0</p>
+                        <p class="description">
+                            AgentHub 是一个强大的智能体管理系统，帮助您管理和使用各种 AI 智能体。
+                            基于 Flask + Vue.js 构建，支持多种 AI 服务提供商。
+                        </p>
+                        <div class="about-stats">
+                            <div class="about-stat">
+                                <span class="stat-value">143+</span>
+                                <span class="stat-label">智能体</span>
+                            </div>
+                            <div class="about-stat">
+                                <span class="stat-value">8</span>
+                                <span class="stat-label">分类</span>
+                            </div>
+                            <div class="about-stat">
+                                <span class="stat-value">2</span>
+                                <span class="stat-label">AI 服务</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>技术栈</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">Flask</span>
+                        <span class="tech-item">JavaScript</span>
+                        <span class="tech-item">CSS3</span>
+                        <span class="tech-item">DeepSeek API</span>
+                        <span class="tech-item">OpenCode</span>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="settings-actions">
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    保存设置
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-page {
+    padding: 32px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.settings-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+}
+
+.settings-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.settings-nav-item:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.settings-nav-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.settings-content {
+    min-width: 0;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+
+.settings-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.settings-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.settings-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.theme-options {
+    display: flex;
+    gap: 16px;
+}
+
+.theme-option {
+    cursor: pointer;
+}
+
+.theme-option input {
+    display: none;
+}
+
+.theme-preview {
+    width: 100px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.theme-preview.dark {
+    background: #0F172A;
+    color: #F8FAFC;
+}
+
+.theme-preview.light {
+    background: #F8FAFC;
+    color: #1E293B;
+}
+
+.theme-option input:checked + .theme-preview {
+    border-color: var(--primary-color);
+}
+
+.test-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.test-result {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+}
+
+.test-result.success {
+    display: block;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.test-result.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+}
+
+.about-info {
+    text-align: center;
+    padding: 20px;
+}
+
+.about-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: var(--primary-color);
+}
+
+.about-logo i {
+    font-size: inherit;
+}
+
+.about-info h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.version {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.description {
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+}
+
+.about-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.about-stat {
+    text-align: center;
+}
+
+.about-stat .stat-value {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.about-stat .stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tech-item {
+    padding: 8px 16px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .settings-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .settings-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+    }
+    
+    .settings-nav-item {
+        flex-shrink: 0;
+    }
+}
+</style>
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.settings-nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const section = item.dataset.section;
+        
+        document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(section).classList.add('active');
+    });
+});
+
+function setTheme(theme) {
+    if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('theme', theme);
+}
+
+function getSavedTheme() {
+    return localStorage.getItem('theme') || 'dark';
+}
+
+document.querySelectorAll('input[name="theme"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        setTheme(e.target.value);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = getSavedTheme();
+    document.querySelector(`input[name="theme"][value="${savedTheme}"]`).checked = true;
+    setTheme(savedTheme);
+    
+    // 加载保存的API配置
+    const savedDeepseekKey = localStorage.getItem('deepseekApiKey');
+    const savedOpencodeUrl = localStorage.getItem('opencodeUrl');
+    const savedDefaultModel = localStorage.getItem('defaultModel');
+    
+    if (savedDeepseekKey) {
+        document.getElementById('deepseekApiKey').value = savedDeepseekKey;
+    }
+    if (savedOpencodeUrl) {
+        document.getElementById('opencodeUrl').value = savedOpencodeUrl;
+    }
+    if (savedDefaultModel) {
+        document.getElementById('defaultModel').value = savedDefaultModel;
+    }
+});
+
+async function testConnection(type) {
+    const resultEl = document.getElementById('testResult');
+    resultEl.className = 'test-result';
+    resultEl.textContent = '测试中...';
+    resultEl.style.display = 'block';
+    
+    try {
+        if (type === 'deepseek') {
+            const apiKey = document.getElementById('deepseekApiKey').value;
+            if (!apiKey) {
+                throw new Error('请先输入 DeepSeek API Key');
+            }
+            // 测试API Key是否有效
+            const response = await fetch('https://api.deepseek.com/v1/models', {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            });
+            if (response.ok) {
+                resultEl.className = 'test-result success';
+                resultEl.textContent = '✓ DeepSeek API 连接正常';
+            } else {
+                const err = await response.json();
+                throw new Error(err.error?.message || 'API Key无效');
+            }
+        } else if (type === 'opencode') {
+            const response = await fetch('http://localhost:8080/health');
+            if (response.ok) {
+                resultEl.className = 'test-result success';
+                resultEl.textContent = '✓ OpenCode 服务连接正常';
+            } else {
+                throw new Error('连接失败');
+            }
+        }
+    } catch (error) {
+        resultEl.className = 'test-result error';
+        resultEl.textContent = '✗ ' + error.message;
+    }
+}
+
+function saveSettings() {
+    const theme = document.querySelector('input[name="theme"]:checked').value;
+    const sidebarDefault = document.getElementById('sidebarDefault').value;
+    const enableHistory = document.getElementById('enableHistory').checked;
+    const deepseekApiKey = document.getElementById('deepseekApiKey').value;
+    const opencodeUrl = document.getElementById('opencodeUrl').value;
+    const defaultModel = document.getElementById('defaultModel').value;
+    
+    localStorage.setItem('sidebarDefault', sidebarDefault);
+    localStorage.setItem('enableHistory', enableHistory);
+    localStorage.setItem('deepseekApiKey', deepseekApiKey);
+    localStorage.setItem('opencodeUrl', opencodeUrl);
+    localStorage.setItem('defaultModel', defaultModel);
+    
+    setTheme(theme);
+    showToast('设置已保存', 'success');
+}
+</script>
+{% endblock %}
+{% endblock %}

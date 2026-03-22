@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+
+{% block title %}AgentHub - 仪表盘{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>数据仪表盘</h1>
+            <p>查看智能体使用情况和系统统计</p>
+        </div>
+        <div class="page-header-actions">
+            <select class="input" id="timeRange" style="width: auto;">
+                <option value="7">最近 7 天</option>
+                <option value="30">最近 30 天</option>
+                <option value="90">最近 90 天</option>
+            </select>
+        </div>
+    </header>
+    
+    <!-- 统计概览 -->
+    <section class="stats-overview">
+        <div class="stat-card-large">
+            <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalConversations">0</div>
+                <div class="stat-label">总对话次数</div>
+                <div class="stat-trend up">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    +12.5%
+                </div>
+            </div>
+        </div>
+        <div class="stat-card-large">
+            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="activeAgents">0</div>
+                <div class="stat-label">活跃智能体</div>
+                <div class="stat-trend up">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    +8.2%
+                </div>
+            </div>
+        </div>
+        <div class="stat-card-large">
+            <div class="stat-icon"><i class="fa-solid fa-stopwatch"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="avgResponseTime">0s</div>
+                <div class="stat-label">平均响应时间</div>
+                <div class="stat-trend down">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                    </svg>
+                    -15.3%
+                </div>
+            </div>
+        </div>
+        <div class="stat-card-large">
+            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="satisfaction">0%</div>
+                <div class="stat-label">用户满意度</div>
+                <div class="stat-trend up">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    +3.1%
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 图表区域 -->
+    <section class="charts-section">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>对话趋势</h3>
+            </div>
+            <div class="chart-body">
+                <div class="chart-placeholder">
+                    <div class="chart-bars">
+                        <div class="chart-bar" style="height: 40%;"></div>
+                        <div class="chart-bar" style="height: 65%;"></div>
+                        <div class="chart-bar" style="height: 45%;"></div>
+                        <div class="chart-bar" style="height: 80%;"></div>
+                        <div class="chart-bar" style="height: 55%;"></div>
+                        <div class="chart-bar" style="height: 70%;"></div>
+                        <div class="chart-bar" style="height: 90%;"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>周一</span>
+                        <span>周二</span>
+                        <span>周三</span>
+                        <span>周四</span>
+                        <span>周五</span>
+                        <span>周六</span>
+                        <span>周日</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>智能体使用分布</h3>
+            </div>
+            <div class="chart-body">
+                <div class="usage-chart" id="usageChart">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 热门智能体排行 -->
+    <section class="rankings-section">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>热门智能体排行</h3>
+            </div>
+            <div class="chart-body">
+                <div class="ranking-list" id="rankingList">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>分类使用统计</h3>
+            </div>
+            <div class="chart-body">
+                <div class="category-stats" id="categoryStats">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function loadDashboard() {
+    try {
+        const [agentsRes, categoriesRes, popularRes] = await Promise.all([
+            fetch('/api/agents'),
+            fetch('/api/agents/categories'),
+            fetch('/api/agents/popular?limit=10')
+        ]);
+        
+        const agents = await agentsRes.json();
+        const categories = await categoriesRes.json();
+        const popular = await popularRes.json();
+        
+        // 更新统计
+        document.getElementById('activeAgents').textContent = agents.data.length;
+        document.getElementById('totalConversations').textContent = agents.data.reduce((sum, a) => sum + (a.usage_count || 0), 0);
+        document.getElementById('avgResponseTime').textContent = '1.2s';
+        document.getElementById('satisfaction').textContent = '96%';
+        
+        // 渲染使用分布
+        const usageChart = document.getElementById('usageChart');
+        const topAgents = popular.data.slice(0, 5);
+        const colors = ['#6366F1', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'];
+        
+        usageChart.innerHTML = topAgents.map((agent, i) => `
+            <div class="usage-item">
+                <div class="usage-info">
+                    <span class="usage-rank">${i + 1}</span>
+                    <span class="usage-name">${agent.name}</span>
+                </div>
+                <div class="usage-bar-container">
+                    <div class="usage-bar" style="width: ${agent.usage_count / topAgents[0].usage_count * 100}%; background: ${colors[i]};"></div>
+                </div>
+                <span class="usage-count">${agent.usage_count || 0}</span>
+            </div>
+        `).join('');
+        
+        // 渲染排行榜
+        const rankingList = document.getElementById('rankingList');
+        rankingList.innerHTML = topAgents.map((agent, i) => `
+            <div class="ranking-item">
+                <div class="ranking-position ${i < 3 ? 'top-' + (i + 1) : ''}">${i + 1}</div>
+                <div class="ranking-avatar" style="background: ${agent.color}20;">
+                    ${agent.icon}
+                </div>
+                <div class="ranking-info">
+                    <div class="ranking-name">${agent.name}</div>
+                    <div class="ranking-stat">${agent.usage_count || 0} 次对话</div>
+                </div>
+            </div>
+        `).join('');
+        
+        // 渲染分类统计
+        const categoryStats = document.getElementById('categoryStats');
+        const categoryCounts = {};
+        agents.data.forEach(a => {
+            categoryCounts[a.category] = (categoryCounts[a.category] || 0) + 1;
+        });
+        
+        categoryStats.innerHTML = categories.data.map(cat => {
+            const count = categoryCounts[cat.id] || 0;
+            const percent = Math.round(count / agents.data.length * 100) || 0;
+            return `
+                <div class="category-stat-item">
+                    <div class="category-stat-header">
+                        <span class="category-stat-icon">${cat.icon}</span>
+                        <span class="category-stat-name">${cat.name}</span>
+                        <span class="category-stat-count">${count}</span>
+                    </div>
+                    <div class="category-stat-bar">
+                        <div class="category-stat-fill" style="width: ${percent}%; background: ${cat.color};"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('加载仪表盘失败:', error);
+    }
+}
+
+loadDashboard();
+</script>
+{% endblock %}

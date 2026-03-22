@@ -1,0 +1,505 @@
+{% extends "layout.html" %}
+
+{% block title %}AgentHub - 首页{% endblock %}
+
+{% block content %}
+<div class="home-page">
+    <!-- Hero 区域 -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="gradient-text">智能体管理中心</span>
+            </h1>
+            <p class="hero-subtitle">
+                143+ 专业智能体，涵盖开发、产品、运营、设计等各个领域<br>
+                选择合适的智能体，让 AI 成为你的得力助手
+            </p>
+            <div class="hero-actions">
+                <a href="/chat" class="btn btn-primary btn-lg">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    开始对话
+                </a>
+                <a href="/agents" class="btn btn-secondary btn-lg">
+                    浏览智能体
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-cards">
+                <div class="float-card" style="--delay: 0s; --color: #6366F1;"><i class="fa-solid fa-code"></i></div>
+                <div class="float-card" style="--delay: 0.5s; --color: #10B981;"><i class="fa-solid fa-chart-bar"></i></div>
+                <div class="float-card" style="--delay: 1s; --color: #8B5CF6;"><i class="fa-solid fa-palette"></i></div>
+                <div class="float-card" style="--delay: 1.5s; --color: #F59E0B;"><i class="fa-solid fa-briefcase"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 统计卡片 -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-robot"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value" id="agentCount">143</div>
+                    <div class="stat-label">专业智能体</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">专业分类</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value" id="conversationCount">0</div>
+                    <div class="stat-label">对话次数</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="stat-info">
+                    <div class="stat-value">4.9</div>
+                    <div class="stat-label">用户满意度</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分类浏览 -->
+    <section class="categories-section">
+        <div class="section-header">
+            <h2>浏览智能体分类</h2>
+            <a href="/agents" class="btn btn-ghost">查看全部 →</a>
+        </div>
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- 动态加载 -->
+        </div>
+    </section>
+
+    <!-- 热门智能体 -->
+    <section class="popular-section">
+        <div class="section-header">
+            <h2>热门智能体</h2>
+            <a href="/agents?sort=popular" class="btn btn-ghost">查看更多 →</a>
+        </div>
+        <div class="agents-scroll" id="popularAgents">
+            <!-- 动态加载 -->
+        </div>
+    </section>
+
+    <!-- 快速开始 -->
+    <section class="quickstart-section">
+        <div class="section-header">
+            <h2>快速开始</h2>
+        </div>
+        <div class="quickstart-grid">
+            <div class="quickstart-card">
+                <div class="quickstart-icon">1</div>
+                <h3>选择智能体</h3>
+                <p>从 143+ 专业智能体中选择适合你需求的</p>
+            </div>
+            <div class="quickstart-card">
+                <div class="quickstart-icon">2</div>
+                <h3>开始对话</h3>
+                <p>用自然语言描述你的问题或需求</p>
+            </div>
+            <div class="quickstart-card">
+                <div class="quickstart-icon">3</div>
+                <h3>获取答案</h3>
+                <p>AI 智能体为你提供专业解答和建议</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+.hero {
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), #EC4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.hero-visual {
+    flex-shrink: 0;
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+.floating-cards {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.float-card {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    animation: float 4s ease-in-out infinite;
+    animation-delay: var(--delay);
+}
+
+.float-card:nth-child(1) { top: 20%; left: 10%; }
+.float-card:nth-child(2) { top: 10%; right: 10%; }
+.float-card:nth-child(3) { bottom: 30%; left: 5%; }
+.float-card:nth-child(4) { bottom: 20%; right: 15%; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* 统计区 */
+.stats-section {
+    padding: 0 40px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    font-size: 40px;
+}
+
+.stat-icon i, .float-card i {
+    font-size: inherit;
+    color: inherit;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* 分类区 */
+.categories-section, .popular-section, .quickstart-section {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.section-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.category-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.category-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+}
+
+.category-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.category-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.category-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.category-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* 热门智能体 */
+.agents-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+}
+
+.agent-card {
+    flex-shrink: 0;
+    width: 300px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.agent-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+}
+
+.agent-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.agent-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.agent-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.agent-category {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.agent-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.agent-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.agent-tag {
+    padding: 4px 10px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 快速开始 */
+.quickstart-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.quickstart-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+}
+
+.quickstart-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    margin: 0 auto 20px;
+}
+
+.quickstart-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.quickstart-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+    }
+    
+    .hero-visual {
+        display: none;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+    }
+    
+    .stats-grid,
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .quickstart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-grid,
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+    }
+}
+</style>
+
+{% block extra_js %}
+<script>
+async function loadHomeData() {
+    try {
+        const [categoriesRes, popularRes] = await Promise.all([
+            fetch('/api/agents/categories'),
+            fetch('/api/agents/popular?limit=6')
+        ]);
+        
+        const categoriesData = await categoriesRes.json();
+        const popularData = await popularRes.json();
+        
+        // 渲染分类
+        const categoriesGrid = document.getElementById('categoriesGrid');
+        categoriesGrid.innerHTML = categoriesData.data.map(cat => `
+            <div class="category-card" onclick="location.href='/agents?category=${cat.id}'">
+                <div class="category-icon">${cat.icon}</div>
+                <div class="category-name">${cat.name}</div>
+                <div class="category-desc">${cat.description}</div>
+                <div class="category-count">${cat.agent_count} 个智能体</div>
+            </div>
+        `).join('');
+        
+        // 渲染热门智能体
+        const popularAgents = document.getElementById('popularAgents');
+        popularAgents.innerHTML = popularData.data.map(agent => `
+            <div class="agent-card" onclick="location.href='/chat?agent=${agent.id}'">
+                <div class="agent-header">
+                    <div class="agent-avatar" style="background: ${agent.color}20;">
+                        ${agent.icon}
+                    </div>
+                    <div>
+                        <div class="agent-name">${agent.name}</div>
+                        <div class="agent-category">${agent.category}</div>
+                    </div>
+                </div>
+                <div class="agent-desc">${agent.description}</div>
+                <div class="agent-tags">
+                    ${agent.capabilities.slice(0, 3).map(cap => `<span class="agent-tag">${cap}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('加载数据失败:', error);
+    }
+}
+
+loadHomeData();
+</script>
+{% endblock %}
+{% endblock %}

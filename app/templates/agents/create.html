@@ -1,0 +1,402 @@
+{% extends "layout.html" %}
+
+{% block title %}创建智能体 - AgentHub{% endblock %}
+
+{% block content %}
+<div class="create-agent-page">
+    <header class="page-header">
+        <a href="/agents" class="btn btn-ghost">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            返回
+        </a>
+        <h1>创建新智能体</h1>
+    </header>
+    
+    <form class="agent-form" id="agentForm">
+        <div class="form-grid">
+            <div class="form-main">
+                <div class="form-section">
+                    <h2>基本信息</h2>
+                    <div class="form-group">
+                        <label class="form-label">智能体名称 <span class="required">*</span></label>
+                        <input type="text" class="input" name="name" required placeholder="例如：高级开发者">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">描述 <span class="required">*</span></label>
+                        <textarea class="input" name="description" required rows="3" placeholder="描述这个智能体的功能和特点"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">分类 <span class="required">*</span></label>
+                            <select class="input" name="category" id="categorySelect" required>
+                                <option value="">选择分类</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">图标</label>
+                            <div class="icon-picker">
+                                <button type="button" class="icon-btn" id="iconBtn"><i class="fa-solid fa-robot"></i></button>
+                                <input type="hidden" name="icon" value="<i class="fa-solid fa-robot"></i>">
+                                <input type="hidden" name="color" value="#6366F1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>系统提示词</h2>
+                    <div class="form-group">
+                        <label class="form-label">系统提示词 <span class="required">*</span></label>
+                        <textarea class="input" name="system_prompt" required rows="8" placeholder="定义智能体的行为、角色和能力"></textarea>
+                        <p class="form-help">这是智能体的核心指令，决定了它的回答风格和专业范围</p>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>能力标签</h2>
+                    <div class="form-group">
+                        <label class="form-label">关键词</label>
+                        <input type="text" class="input" name="keywords" id="keywordsInput" placeholder="输入关键词，用逗号分隔">
+                        <p class="form-help">帮助用户通过搜索找到这个智能体</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">能力</label>
+                        <div class="capabilities-input" id="capabilitiesInput">
+                            <div class="capability-tag" contenteditable="true">点击添加能力</div>
+                        </div>
+                        <input type="hidden" name="capabilities" id="capabilitiesHidden">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-sidebar">
+                <div class="preview-card">
+                    <h3>预览</h3>
+                        <div class="preview-content" id="previewContent">
+                            <div class="preview-avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="preview-name">智能体名称</div>
+                            <div class="preview-category">选择分类</div>
+                            <div class="preview-desc">描述将显示在这里</div>
+                        </div>
+                </div>
+                
+                <div class="form-tips">
+                    <h4><i class="fa-solid fa-lightbulb"></i> 提示</h4>
+                    <ul>
+                        <li>名称要简洁明了，能一眼看出智能体的用途</li>
+                        <li>描述要详细说明功能和适用场景</li>
+                        <li>系统提示词要清晰、具体，避免歧义</li>
+                        <li>选择合适的分类，帮助用户发现</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="location.href='/agents'">取消</button>
+            <button type="submit" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                创建智能体
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.create-agent-page {
+    padding: 32px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+}
+
+.form-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.form-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+}
+
+.required {
+    color: var(--danger-color);
+}
+
+.icon-picker {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.icon-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn i {
+    font-size: inherit;
+    color: inherit;
+}
+
+.icon-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.capabilities-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.capability-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.capability-tag[contenteditable="true"] {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px dashed var(--border-color);
+}
+
+.capability-tag[contenteditable="true"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-sidebar {
+    position: sticky;
+    top: 32px;
+}
+
+.preview-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.preview-card h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.preview-content {
+    text-align: center;
+}
+
+.preview-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-color);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 16px;
+    color: white;
+}
+
+.preview-avatar i {
+    font-size: inherit;
+}
+
+.preview-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.preview-category {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.preview-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.form-tips {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.form-tips h4 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.form-tips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.form-tips li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    padding-left: 16px;
+    position: relative;
+}
+
+.form-tips li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-sidebar {
+        position: static;
+    }
+}
+</style>
+
+{% block extra_js %}
+<script>
+const categories = {{ categories | tojson | safe }};
+
+// 初始化分类选项
+const categorySelect = document.getElementById('categorySelect');
+categorySelect.innerHTML = '<option value="">选择分类</option>' + 
+    categories.map(cat => `<option value="${cat.id}">${cat.icon} ${cat.name}</option>`).join('');
+
+// 实时预览
+const form = document.getElementById('agentForm');
+const previewAvatar = document.querySelector('.preview-avatar');
+const previewName = document.querySelector('.preview-name');
+const previewCategory = document.querySelector('.preview-category');
+const previewDesc = document.querySelector('.preview-desc');
+
+form.addEventListener('input', () => {
+    const name = form.name?.value || '智能体名称';
+    const categoryId = form.category?.value;
+    const category = categories.find(c => c.id === categoryId);
+    const desc = form.description?.value || '描述将显示在这里';
+    const icon = form.icon?.value || '<i class="fa-solid fa-robot"></i>';
+    
+    previewAvatar.textContent = icon;
+    previewName.textContent = name;
+    previewCategory.textContent = category ? `${category.icon} ${category.name}` : '选择分类';
+    previewDesc.textContent = desc;
+});
+
+// 提交表单
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+        id: form.name.value.toLowerCase().replace(/\s+/g, '-'),
+        name: form.name.value,
+        description: form.description.value,
+        category: form.category.value,
+        icon: form.icon.value,
+        color: form.color.value,
+        system_prompt: form.system_prompt.value,
+        capabilities: [],
+        keywords: form.keywords.value.split(',').map(k => k.trim()).filter(k => k)
+    };
+    
+    // 获取能力标签
+    document.querySelectorAll('.capabilities-input .capability-tag:not([contenteditable])').forEach(tag => {
+        formData.capabilities.push(tag.textContent.trim());
+    });
+    
+    try {
+        const res = await fetch('/api/agents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        
+        if (res.ok) {
+            showToast('智能体创建成功', 'success');
+            location.href = '/agents';
+        } else {
+            throw new Error('创建失败');
+        }
+    } catch (error) {
+        showToast('创建失败: ' + error.message, 'error');
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,371 @@
+{% extends "layout.html" %}
+
+{% block title %}编辑智能体 - AgentHub{% endblock %}
+
+{% block content %}
+<div class="create-agent-page">
+    <header class="page-header">
+        <a href="/agents" class="btn btn-ghost">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            返回
+        </a>
+        <h1>编辑智能体</h1>
+    </header>
+    
+    <form class="agent-form" id="agentForm" data-agent-id="{{ agent_id }}">
+        <div class="form-grid">
+            <div class="form-main">
+                <div class="form-section">
+                    <h2>基本信息</h2>
+                    <div class="form-group">
+                        <label class="form-label">智能体名称 <span class="required">*</span></label>
+                        <input type="text" class="input" name="name" id="agentName" required placeholder="例如：高级开发者">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">描述 <span class="required">*</span></label>
+                        <textarea class="input" name="description" id="agentDesc" required rows="3" placeholder="描述这个智能体的功能和特点"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">分类 <span class="required">*</span></label>
+                            <select class="input" name="category" id="categorySelect" required>
+                                <option value="">选择分类</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">图标</label>
+                            <div class="icon-picker">
+                                <button type="button" class="icon-btn" id="iconBtn"><i class="fa-solid fa-robot"></i></button>
+                                <input type="hidden" name="icon" id="agentIcon" value="<i class="fa-solid fa-robot"></i>">
+                                <input type="hidden" name="color" id="agentColor" value="#6366F1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>系统提示词</h2>
+                    <div class="form-group">
+                        <label class="form-label">系统提示词 <span class="required">*</span></label>
+                        <textarea class="input" name="system_prompt" id="systemPrompt" required rows="8" placeholder="定义智能体的行为、角色和能力"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2>能力标签</h2>
+                    <div class="form-group">
+                        <label class="form-label">关键词</label>
+                        <input type="text" class="input" name="keywords" id="keywordsInput" placeholder="输入关键词，用逗号分隔">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">能力</label>
+                        <div class="capabilities-input" id="capabilitiesInput">
+                            <div class="capability-tag" contenteditable="true">点击添加能力</div>
+                        </div>
+                        <input type="hidden" name="capabilities" id="capabilitiesHidden">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-sidebar">
+                <div class="preview-card">
+                    <h3>预览</h3>
+                    <div class="preview-content" id="previewContent">
+                        <div class="preview-avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="preview-name">智能体名称</div>
+                        <div class="preview-category">选择分类</div>
+                        <div class="preview-desc">描述将显示在这里</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="location.href='/agents'">取消</button>
+            <button type="submit" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                保存更改
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.create-agent-page {
+    padding: 32px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+}
+
+.form-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.form-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+}
+
+.required {
+    color: var(--danger-color);
+}
+
+.icon-picker {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.icon-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn i {
+    font-size: inherit;
+    color: inherit;
+}
+
+.capabilities-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.capability-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.capability-tag[contenteditable="true"] {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px dashed var(--border-color);
+}
+
+.form-sidebar {
+    position: sticky;
+    top: 32px;
+}
+
+.preview-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.preview-card h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.preview-content {
+    text-align: center;
+}
+
+.preview-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-color);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 16px;
+    color: white;
+}
+
+.preview-avatar i {
+    font-size: inherit;
+}
+
+.preview-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.preview-category {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.preview-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+</style>
+
+{% block extra_js %}
+<script>
+const agentId = '{{ agent_id }}';
+const agentData = null;
+const categories = {{ categories | tojson | safe }};
+
+// 加载智能体数据
+async function loadAgent() {
+    try {
+        const res = await fetch(`/api/agents/${agentId}`);
+        const data = await res.json();
+        
+        if (data.code === 0) {
+            const agent = data.data;
+            
+            document.getElementById('agentName').value = agent.name;
+            document.getElementById('agentDesc').value = agent.description;
+            document.getElementById('categorySelect').value = agent.category;
+            document.getElementById('agentIcon').value = agent.icon;
+            document.getElementById('agentColor').value = agent.color;
+            document.getElementById('iconBtn').textContent = agent.icon;
+            document.getElementById('systemPrompt').value = agent.system_prompt;
+            document.getElementById('keywordsInput').value = agent.keywords?.join(', ') || '';
+            
+            // 渲染能力标签
+            const capInput = document.getElementById('capabilitiesInput');
+            capInput.innerHTML = agent.capabilities?.map(cap => 
+                `<span class="capability-tag">${cap}</span>`
+            ).join('') || '';
+            capInput.innerHTML += '<span class="capability-tag" contenteditable="true">点击添加能力</span>';
+            
+            updatePreview();
+        }
+    } catch (error) {
+        console.error('加载智能体失败:', error);
+    }
+}
+
+// 初始化分类
+const categorySelect = document.getElementById('categorySelect');
+categorySelect.innerHTML = '<option value="">选择分类</option>' + 
+    categories.map(cat => `<option value="${cat.id}">${cat.icon} ${cat.name}</option>`).join('');
+
+// 预览更新
+function updatePreview() {
+    const previewAvatar = document.querySelector('.preview-avatar');
+    const previewName = document.querySelector('.preview-name');
+    const previewCategory = document.querySelector('.preview-category');
+    const previewDesc = document.querySelector('.preview-desc');
+    
+    previewAvatar.textContent = document.getElementById('agentIcon').value || '<i class="fa-solid fa-robot"></i>';
+    previewName.textContent = document.getElementById('agentName').value || '智能体名称';
+    
+    const catId = document.getElementById('categorySelect').value;
+    const cat = categories.find(c => c.id === catId);
+    previewCategory.textContent = cat ? `${cat.icon} ${cat.name}` : '选择分类';
+    
+    previewDesc.textContent = document.getElementById('agentDesc').value || '描述将显示在这里';
+}
+
+document.getElementById('agentForm').addEventListener('input', updatePreview);
+
+// 提交表单
+document.getElementById('agentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('agentName').value,
+        description: document.getElementById('agentDesc').value,
+        category: document.getElementById('categorySelect').value,
+        icon: document.getElementById('agentIcon').value,
+        color: document.getElementById('agentColor').value,
+        system_prompt: document.getElementById('systemPrompt').value,
+        capabilities: [],
+        keywords: document.getElementById('keywordsInput').value.split(',').map(k => k.trim()).filter(k => k)
+    };
+    
+    document.querySelectorAll('.capabilities-input .capability-tag:not([contenteditable])').forEach(tag => {
+        formData.capabilities.push(tag.textContent.trim());
+    });
+    
+    try {
+        const res = await fetch(`/api/agents/${agentId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        
+        if (res.ok) {
+            showToast('保存成功', 'success');
+            location.href = '/agents';
+        } else {
+            throw new Error('保存失败');
+        }
+    } catch (error) {
+        showToast('保存失败: ' + error.message, 'error');
+    }
+});
+
+loadAgent();
+</script>
+{% endblock %}
+{% endblock %}
